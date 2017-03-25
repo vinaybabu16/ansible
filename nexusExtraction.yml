@@ -1,0 +1,24 @@
+---
+- hosts: apacheweb
+  user: test
+  become: true
+  become_method: sudo
+  tasks:
+   - name: Checking and installing Apache
+     yum :
+       name: tomcat
+       state: installed
+   - name: starting the httpd
+     service:
+       name: tomcat
+       enabled : yes
+       state: started
+   - name: Extracting the war file
+     maven_artifact:
+       group_id: com.jamesward
+       artifact_id: core
+       repository_url: http://52.27.244.78:8081/nexus/content/repositories/snapshots
+       extension: jar
+       username: admin
+       password: admin123
+       dest: /var/lib/tomcat/webapps/
